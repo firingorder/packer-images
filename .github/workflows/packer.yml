@@ -46,10 +46,7 @@ jobs:
       id: check_manifest
       uses: sergeysova/jq-action@v2
       with:
-        inlineScript: |
-          echo "publisher=$(cat ${{ inputs.image_directory }}/manifest.json | jq --raw-output '.publisher')" >> $GITHUB_OUTPUT
-          echo "offer=$(cat ${{ inputs.image_directory }}/manifest.json | jq --raw-output '.offer')" >> $GITHUB_OUTPUT
-          echo "sku=$(cat ${{ inputs.image_directory }}/manifest.json | jq --raw-output '.sku')" >> $GITHUB_OUTPUT
+        cmd: 'jq . package.json -r'
 
   build:
     name: Run Packer
