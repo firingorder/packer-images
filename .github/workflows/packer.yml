@@ -25,11 +25,6 @@ on:
       packer_build_resource_group:
         required: true
 
-env:
-  IMAGE_PUBLISHER: MicrosoftWindowsDesktop
-  IMAGE_OFFER: windows-11
-  IMAGE_SKU: win11-21h2-avd
-
 jobs:
   check_manifest:
     name: Fetch image from manifest
@@ -82,12 +77,12 @@ jobs:
         arguments: -color=false
         target: ./${{ inputs.image_directory }}/template.pkr.hcl
       env:
-        PKR_VAR_client_id: ${{ secrets.PACKER_CLIENT_ID }}
-        PKR_VAR_client_secret: ${{ secrets.PACKER_CLIENT_SECRET }}
-        PKR_VAR_subscription_id: ${{ secrets.PACKER_SUBSCRIPTION_ID }}
-        PKR_VAR_tenant_id: ${{ secrets.PACKER_TENANT_ID }}
-        PKR_VAR_artifacts_resource_group: ${{ secrets.PACKER_ARTIFACTS_RESOURCE_GROUP }}
-        PKR_VAR_build_resource_group: ${{ secrets.PACKER_BUILD_RESOURCE_GROUP }}
+        PKR_VAR_client_id: ${{ secrets.packer_client_id }}
+        PKR_VAR_client_secret: ${{ secrets.packer_client_secrets }}
+        PKR_VAR_subscription_id: ${{ secrets.packer_subscription_id }}
+        PKR_VAR_tenant_id: ${{ secrets.packer_tenant_id }}
+        PKR_VAR_artifacts_resource_group: ${{ secrets.packer_artifacts_resource_group }}
+        PKR_VAR_build_resource_group: ${{ secrets.packer_build_resource_group }}
         PKR_VAR_source_image_publisher: ${{ needs.check_manifest.outputs.publisher }}
         PKR_VAR_source_image_offer: ${{ needs.check_manifest.outputs.offer }}
         PKR_VAR_source_image_sku: ${{ needs.check_manifest.outputs.sku }}
