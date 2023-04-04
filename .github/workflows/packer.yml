@@ -46,7 +46,7 @@ jobs:
       id: check_manifest
       uses: sergeysova/jq-action@v2
       with:
-        cmd: 'jq . package.json -r'
+        cmd: 'jq . ${{ inputs.image_directory }}/manifest.json -r'
 
   build:
     name: Run Packer
