@@ -6,9 +6,10 @@ on:
       image_directory:
         required: true
         type: string
-      image_version:
-        required: true
-        type: string
+      force_build:
+        required: false
+        type: boolean
+        default: 'false'
     secrets:
       packer_azure_credentials:
         required: true
@@ -55,10 +56,70 @@ jobs:
       with:
         cmd: 'jq .sku ${{ inputs.image_directory }}/manifest.json -r'
 
+  latest_version:
+    name: Get latest version from Azure
+    runs-on: ubuntu-latest
+    needs: check_manifest
+    outputs:
+      version: ${{ steps.get_latest_version.outputs.version }}
+    steps:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.packer_azure_credentials }}
+
+    - name: Get Latest Version
+      id: get_latest_version
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.34.1
+        inlineScript: |
+          latest_version=$(
+            az vm image show \
+              --urn "${{ needs.check_manifest.outputs.publisher }}:${{ needs.check_manifest.outputs.offer }}:${{ needs.check_manifest.outputs.sku }}:latest" \
+              --query name \
+              --out tsv
+          )
+          echo "Publisher: ${{ needs.check_manifest.outputs.publisher }}"
+          echo "Offer:     ${{ needs.check_manifest.outputs.offer }}"
+          echo "SKU:       ${{ needs.check_manifest.outputs.sku }}"
+          echo "Version:   ${latest_version}"
+          echo "version=${latest_version}" >> $GITHUB_OUTPUT
+
+  check_image_exists:
+    name: Check if latest version has already been built
+    runs-on: ubuntu-latest
+    needs: [check_manifest, latest_version]
+    if: inputs.force_build == 'false'
+    outputs:
+      exists: ${{ steps.get_image.outputs.exists }}
+    steps:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.packer_azure_credentials }}
+
+    - name: Check If Image Exists
+      id: get_image
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.34.1
+        inlineScript: |
+          if az image show \
+            --resource-group "${{ secrets.packer_artifacts_resource_group }}" \
+            --name "${{ inputs.sku }}-${{ needs.latest_version.outputs.version }}"; then
+            image_exists=true
+          else
+            image_exists=false
+          fi
+          echo "Image Exists: ${image_exists}"
+          echo "exists=${image_exists}" >> $GITHUB_OUTPUT
+
   build:
     name: Run Packer
     runs-on: ubuntu-latest
-    needs: [check_manifest]
+    needs: [check_manifest, latest_version, check_image_exists]
+    if: inputs.force_build == 'true' || needs.check_image_exists.outputs.exists == 'false'
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
@@ -86,5 +147,4 @@ jobs:
         PKR_VAR_source_image_publisher: ${{ needs.check_manifest.outputs.publisher }}
         PKR_VAR_source_image_offer: ${{ needs.check_manifest.outputs.offer }}
         PKR_VAR_source_image_sku: ${{ needs.check_manifest.outputs.sku }}
-        PKR_VAR_source_image_version: ${{ inputs.image_version }}
-
+        PKR_VAR_source_image_version: ${{ needs.latest_version.outputs.version }}

@@ -1,75 +1,18 @@
-name: Packer
+name: Patch All
 
 on:
   schedule:
   - cron: 0 0 * * *
 
 jobs:
-  latest_windows_version:
-    name: Get latest Windows version from Azure
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.get_latest_version.outputs.version }}
-    steps:
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.packer_azure_credentials }}
-
-    - name: Get Latest Version
-      id: get_latest_version
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 2.34.1
-        inlineScript: |
-          latest_version=$(
-            az vm image show \
-              --urn "${IMAGE_PUBLISHER}:${IMAGE_OFFER}:${IMAGE_SKU}:latest" \
-              --query name \
-              --out tsv
-          )
-          echo "Publisher: ${IMAGE_PUBLISHER}"
-          echo "Offer:     ${IMAGE_OFFER}"
-          echo "SKU:       ${IMAGE_SKU}"
-          echo "Version:   ${latest_version}"
-          echo "version=${latest_version}" >> $GITHUB_OUTPUT
-
-  check_image_exists:
-    name: Check if latest version has already been built
-    runs-on: ubuntu-latest
-    needs: latest_windows_version
-    outputs:
-      exists: ${{ steps.get_image.outputs.exists }}
-    steps:
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.packer_azure_credentials }}
-
-    - name: Check If Image Exists
-      id: get_image
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 2.34.1
-        inlineScript: |
-          if az image show \
-            --resource-group "${{ secrets.PACKER_ARTIFACTS_RESOURCE_GROUP }}" \
-            --name "${IMAGE_SKU}-${{ needs.latest_windows_version.outputs.version }}"; then
-            image_exists=true
-          else
-            image_exists=false
-          fi
-          echo "Image Exists: ${image_exists}"
-          echo "exists=${image_exists}" >> $GITHUB_OUTPUT
-
-  build-packer-images:
+  patch:
     uses: ./.github/workflows/packer.yml
     strategy:
       matrix:
-        image_directory:
+        image:
         - windows/ue5-agent
     with:
-      image_version: latest
+      image_directory: ${{ matrix.image }}
     secrets:
       packer_azure_credentials: ${{ secrets.PACKER_AZURE_CREDENTIALS }}
       packer_client_id: ${{ secrets.PACKER_CLIENT_ID }}
