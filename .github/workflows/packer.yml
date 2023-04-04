@@ -9,7 +9,7 @@ on:
       force_build:
         required: false
         type: boolean
-        default: 'false'
+        default: false
     secrets:
       packer_azure_credentials:
         required: true

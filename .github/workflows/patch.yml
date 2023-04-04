@@ -13,6 +13,7 @@ jobs:
         - windows/ue5-agent
     with:
       image_directory: ${{ matrix.image }}
+      force_build: false
     secrets:
       packer_azure_credentials: ${{ secrets.PACKER_AZURE_CREDENTIALS }}
       packer_client_id: ${{ secrets.PACKER_CLIENT_ID }}
