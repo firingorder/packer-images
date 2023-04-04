@@ -1,55 +1,8 @@
-variable "client_id" {
-  type        = string
-  description = "Azure Service Principal App ID."
-  sensitive   = true
-}
-
-variable "client_secret" {
-  type        = string
-  description = "Azure Service Principal Secret."
-  sensitive   = true
-}
-
-variable "subscription_id" {
-  type        = string
-  description = "Azure Subscription ID."
-  sensitive   = true
-}
-
-variable "tenant_id" {
-  type        = string
-  description = "Azure Tenant ID."
-  sensitive   = true
-}
-
-variable "artifacts_resource_group" {
-  type        = string
-  description = "Packer Artifacts Resource Group."
-}
-
-variable "build_resource_group" {
-  type        = string
-  description = "Packer Build Resource Group."
-}
-
-variable "source_image_publisher" {
-  type        = string
-  description = "Windows Image Publisher."
-}
-
-variable "source_image_offer" {
-  type        = string
-  description = "Windows Image Offer."
-}
-
-variable "source_image_sku" {
-  type        = string
-  description = "Windows Image SKU."
-}
-
-variable "source_image_version" {
-  type        = string
-  description = "Windows Image Version."
+locals {
+  image_name = "ue5-agent-${var.source_image_sku}-${var.source_image_version}"
+  vm_size    = "Standard_D4ds_v4"
+  timeout    = "5m"
+  username   = "packer"
 }
 
 source "azure-arm" "avd" {
@@ -59,8 +12,8 @@ source "azure-arm" "avd" {
   communicator   = "winrm"
   winrm_use_ssl  = true
   winrm_insecure = true
-  winrm_timeout  = "5m"
-  winrm_username = "packer"
+  winrm_timeout  = local.timeout
+  winrm_username = local.username
 
   # Service Principal Authentication
 
@@ -80,12 +33,12 @@ source "azure-arm" "avd" {
   # Destination Image
 
   managed_image_resource_group_name = var.artifacts_resource_group
-  managed_image_name                = "${var.source_image_sku}-${var.source_image_version}"
+  managed_image_name                = local.image_name
 
   # Packer Computing Resources
 
   build_resource_group_name = var.build_resource_group
-  vm_size                   = "Standard_D4ds_v4"
+  vm_size                   = local.vm_size
 }
 
 build {
