@@ -10,9 +10,10 @@ jobs:
     uses: ./.github/workflows/packer.yml
     strategy:
       matrix:
-        image_directory:
+        image:
         - windows/ue5-agent
     with:
+      image_directory: ${{ matrix.image }}
       image_version: latest
     secrets:
       packer_azure_credentials: ${{ secrets.PACKER_AZURE_CREDENTIALS }}
