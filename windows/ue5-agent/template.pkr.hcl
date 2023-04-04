@@ -51,7 +51,7 @@ build {
 
   # Install Chocolatey packages
   provisioner "file" {
-    source      = "${path.root}/packages.config"
+    source      = "${path.root}/files/packages.config"
     destination = "D:/packages.config"
   }
 
