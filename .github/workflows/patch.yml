@@ -63,7 +63,7 @@ jobs:
           echo "exists=${image_exists}" >> $GITHUB_OUTPUT
 
   build-packer-images:
-    uses: ./packer.yml
+    uses: ./.github/workflows/packer.yml
     strategy:
       matrix:
         image_directory:

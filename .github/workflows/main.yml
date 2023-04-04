@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-packer-images:
-    uses: ./packer.yml
+    uses: ./.github/workflows/packer.yml
     strategy:
       matrix:
         image_directory:
