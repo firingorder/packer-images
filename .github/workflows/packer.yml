@@ -129,14 +129,14 @@ jobs:
       with:
         command: validate
         arguments: -syntax-only
-        target: ./${{ inputs.image_directory }}/template.pkr.hcl
+        target: ./${{ inputs.image_directory }}
 
     - name: Build Packer Image
       uses: hashicorp/packer-github-actions@master
       with:
         command: build
         arguments: -color=false
-        target: ./${{ inputs.image_directory }}/template.pkr.hcl
+        target: ./${{ inputs.image_directory }}
       env:
         PKR_VAR_client_id: ${{ secrets.packer_client_id }}
         PKR_VAR_client_secret: ${{ secrets.packer_client_secret }}
