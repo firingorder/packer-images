@@ -35,18 +35,30 @@ jobs:
     name: Fetch image from manifest
     runs-on: ubuntu-latest
     outputs:
-      publisher: ${{ steps.check_manifest.outputs.publisher }}
-      offer: ${{ steps.check_manifest.outputs.offer }}
-      sku: ${{ steps.check_manifest.outputs.sku }}
+      publisher: ${{ steps.fetch_publisher.outputs.value }}
+      offer: ${{ steps.fetch_offer.outputs.value }}
+      sku: ${{ steps.fetch_sku.outputs.value }}
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Check Manifest
-      id: check_manifest
+    - name: Fetch Publisher
+      id: fetch_publisher
       uses: sergeysova/jq-action@v2
       with:
-        cmd: 'jq . ${{ inputs.image_directory }}/manifest.json -r'
+        cmd: 'jq .publisher ${{ inputs.image_directory }}/manifest.json -r'
+
+    - name: Fetch Offer
+      id: fetch_offer
+      uses: sergeysova/jq-action@v2
+      with:
+        cmd: 'jq .offer ${{ inputs.image_directory }}/manifest.json -r'
+
+    - name: Fetch SKU
+      id: fetch_sku
+      uses: sergeysova/jq-action@v2
+      with:
+        cmd: 'jq .sku ${{ inputs.image_directory }}/manifest.json -r'
 
   build:
     name: Run Packer
