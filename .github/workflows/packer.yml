@@ -90,7 +90,7 @@ jobs:
     name: Check if latest version has already been built
     runs-on: ubuntu-latest
     needs: [check_manifest, latest_version]
-    if: inputs.force_build == 'false'
+    if: inputs.force_build == false
     outputs:
       exists: ${{ steps.get_image.outputs.exists }}
     steps:
@@ -119,7 +119,7 @@ jobs:
     name: Run Packer
     runs-on: ubuntu-latest
     needs: [check_manifest, latest_version, check_image_exists]
-    if: always() && (inputs.force_build == 'true' || needs.check_image_exists.outputs.exists == 'false')
+    if: always() && (inputs.force_build == true || needs.check_image_exists.outputs.exists == false)
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
