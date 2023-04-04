@@ -78,7 +78,7 @@ jobs:
         target: ./${{ inputs.image_directory }}/template.pkr.hcl
       env:
         PKR_VAR_client_id: ${{ secrets.packer_client_id }}
-        PKR_VAR_client_secret: ${{ secrets.packer_client_secrets }}
+        PKR_VAR_client_secret: ${{ secrets.packer_client_secret }}
         PKR_VAR_subscription_id: ${{ secrets.packer_subscription_id }}
         PKR_VAR_tenant_id: ${{ secrets.packer_tenant_id }}
         PKR_VAR_artifacts_resource_group: ${{ secrets.packer_artifacts_resource_group }}
