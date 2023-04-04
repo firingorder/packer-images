@@ -1,0 +1,86 @@
+name: Packer
+
+on:
+  workflow_call:
+    inputs:
+      image_directory:
+        required: true
+        type: string
+      image_version:
+        required: true
+        type: string
+    secrets:
+      packer_azure_credentials:
+        required: true
+      packer_client_id:
+        required: true
+      packer_client_secret:
+        required: true
+      packer_subscription_id:
+        required: true
+      packer_tenant_id:
+        required: true
+      packer_artifacts_resource_group:
+        required: true
+      packer_build_resource_group:
+        required: true
+
+env:
+  IMAGE_PUBLISHER: MicrosoftWindowsDesktop
+  IMAGE_OFFER: windows-11
+  IMAGE_SKU: win11-21h2-avd
+
+jobs:
+  check_manifest:
+    name: Fetch image from manifest
+    runs-on: ubuntu-latest
+    outputs:
+      publisher: ${{ steps.check_manifest.outputs.publisher }}
+      offer: ${{ steps.check_manifest.outputs.offer }}
+      sku: ${{ steps.check_manifest.outputs.sku }}
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Check Manifest
+      id: check_manifest
+      uses: sergeysova/jq-action@v2
+      with:
+        inlineScript: |
+          echo "publisher=$(cat ${{ inputs.image_directory }}/manifest.json | jq --raw-output '.publisher')" >> $GITHUB_OUTPUT
+          echo "offer=$(cat ${{ inputs.image_directory }}/manifest.json | jq --raw-output '.offer')" >> $GITHUB_OUTPUT
+          echo "sku=$(cat ${{ inputs.image_directory }}/manifest.json | jq --raw-output '.sku')" >> $GITHUB_OUTPUT
+
+  build:
+    name: Run Packer
+    runs-on: ubuntu-latest
+    needs: [check_manifest]
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Validate Packer Template
+      uses: hashicorp/packer-github-actions@master
+      with:
+        command: validate
+        arguments: -syntax-only
+        target: ./${{ inputs.image_directory }}/template.pkr.hcl
+
+    - name: Build Packer Image
+      uses: hashicorp/packer-github-actions@master
+      with:
+        command: build
+        arguments: -color=false
+        target: ./${{ inputs.image_directory }}/template.pkr.hcl
+      env:
+        PKR_VAR_client_id: ${{ secrets.PACKER_CLIENT_ID }}
+        PKR_VAR_client_secret: ${{ secrets.PACKER_CLIENT_SECRET }}
+        PKR_VAR_subscription_id: ${{ secrets.PACKER_SUBSCRIPTION_ID }}
+        PKR_VAR_tenant_id: ${{ secrets.PACKER_TENANT_ID }}
+        PKR_VAR_artifacts_resource_group: ${{ secrets.PACKER_ARTIFACTS_RESOURCE_GROUP }}
+        PKR_VAR_build_resource_group: ${{ secrets.PACKER_BUILD_RESOURCE_GROUP }}
+        PKR_VAR_source_image_publisher: ${{ needs.check_manifest.outputs.publisher }}
+        PKR_VAR_source_image_offer: ${{ needs.check_manifest.outputs.offer }}
+        PKR_VAR_source_image_sku: ${{ needs.check_manifest.outputs.sku }}
+        PKR_VAR_source_image_version: ${{ inputs.image_version }}
+
