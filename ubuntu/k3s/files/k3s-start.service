@@ -1,0 +1,9 @@
+[Unit]
+Description=Start/Join K3s Cluster
+DefaultDependencies=no
+After=multi-user.target
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/k3s/k3s-start.sh
+[Install]
+WantedBy=multi-user.target

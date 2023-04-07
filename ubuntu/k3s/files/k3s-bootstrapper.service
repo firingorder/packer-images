@@ -1,0 +1,9 @@
+[Unit]
+Description=k3s Bootstrapper
+DefaultDependencies=no
+After=multi-user.target
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/k3s/k3s-bootstrapper.py
+[Install]
+WantedBy=multi-user.target

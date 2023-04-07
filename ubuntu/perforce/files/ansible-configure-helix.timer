@@ -1,0 +1,10 @@
+[Unit]
+Description=Run ansible-pull to get common server configuration
+Requires=p4-configure-helix.service
+      
+[Timer]
+Unit=p4-configure-helix.service
+OnCalendar=*:0/01:00
+      
+[Install]
+WantedBy=timers.target

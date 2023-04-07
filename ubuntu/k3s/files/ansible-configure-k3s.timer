@@ -1,0 +1,10 @@
+[Unit]
+Description=Run ansible-pull to get common server configuration
+Requires=ansible-configure-k3s.service
+      
+[Timer]
+Unit=ansible-configure-k3s.service
+OnCalendar=*:0/01:00
+      
+[Install]
+WantedBy=timers.target

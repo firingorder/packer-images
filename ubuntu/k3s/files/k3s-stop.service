@@ -1,0 +1,9 @@
+[Unit]
+Description=Leave K3s Cluster
+DefaultDependencies=no
+Before=shutdown.target reboot.target halt.target
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/k3s/k3s-stop.sh
+[Install]
+WantedBy=halt.target reboot.target shutdown.target

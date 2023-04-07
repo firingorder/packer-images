@@ -1,0 +1,9 @@
+[Unit]
+Description=Azure Spot Instance Events
+DefaultDependencies=no
+After=multi-user.target
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/k3s/k3s-spot-helper.py
+[Install]
+WantedBy=multi-user.target

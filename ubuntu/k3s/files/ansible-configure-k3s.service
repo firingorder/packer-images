@@ -1,0 +1,10 @@
+[Unit]
+Description=Run ansible-pull to get common server configuration
+Requires=ansible-configure-k3s.timer
+      
+[Service]
+Type=oneshot
+ExecStart=/opt/ansible/ansible-configure-k3s.sh
+      
+[Install]
+WantedBy=timers.target

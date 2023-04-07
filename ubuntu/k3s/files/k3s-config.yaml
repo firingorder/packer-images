@@ -1,0 +1,6 @@
+docker: false
+
+bind-address: "0.0.0.0"
+https-listen-port: 6443
+
+with-node-id: true

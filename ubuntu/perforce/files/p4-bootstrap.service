@@ -1,0 +1,9 @@
+[Unit]
+Description=P4 Bootstrapper
+DefaultDependencies=no
+After=multi-user.target
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/sdp/p4-bootstrap.sh
+[Install]
+WantedBy=multi-user.target
