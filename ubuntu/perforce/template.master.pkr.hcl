@@ -1,5 +1,5 @@
 source "azure-arm" "master" {
-  ssh_username = "root"
+  ssh_username = "p4admin"
 
   client_id       = var.client_id
   client_secret   = var.client_secret

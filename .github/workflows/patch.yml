@@ -11,8 +11,8 @@ jobs:
       fail-fast: false
       matrix:
         image:
-        - windows/ue5-agent
-        - ubuntu/k3s
+        #- windows/ue5-agent
+        #- ubuntu/k3s
         - ubuntu/perforce
     with:
       image_directory: ${{ matrix.image }}
