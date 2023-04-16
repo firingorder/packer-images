@@ -34,7 +34,7 @@ build {
   }
 
   provisioner "file" {
-    content = templatefile("${path.root}/files/p4-config.pkrtpl.hcl", {
+    content = templatefile("${path.root}/files/p4-cfg.pkrtpl.hcl", {
       INSTANCE    = 1
       SERVER_ID   = ""
       SERVER_TYPE = "p4d_master"
