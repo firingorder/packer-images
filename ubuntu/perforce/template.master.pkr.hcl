@@ -34,7 +34,6 @@ build {
   }
 
   provisioner "file" {
-    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
     content = templatefile("files/p4-cfg.pkrtpl.hcl", {
       INSTANCE    = 1
       SERVER_ID   = ""
@@ -44,25 +43,6 @@ build {
   }
 
   provisioner "file" {
-    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
-    source      = "${path.root}/files/p4-reset-sdp.sh"
-    destination = "/usr/local/bin/sdp/reset_sdp.sh"
-  }
-
-  provisioner "file" {
-    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
-    source      = "${path.root}/files/p4-bootstrap.sh"
-    destination = "/usr/local/bin/sdp/"
-  }
-
-  provisioner "file" {
-    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
-    source      = "${path.root}/files/ansible-configure-helix.sh"
-    destination = "/usr/local/bin/ansible/"
-  }
-
-  provisioner "file" {
-    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
     content = templatefile("files/ansible-hosts.pkrtpl.hcl", {
       INSTANCE = 1
     })
@@ -70,13 +50,35 @@ build {
   }
 
   provisioner "file" {
-    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
     sources = [
+      # Services
       "${path.root}/files/p4-bootstrap.service",
       "${path.root}/files/ansible-configure-helix.service",
       "${path.root}/files/ansible-configure-helix.timer",
+      # Ansible
+      "${path.root}/files/ansible-configure-helix.sh",
+      # P4
+      "${path.root}/files/p4-bootstrap.sh"
+      "${path.root}/files/p4-reset-sdp.sh"
     ]
-    destination = "/etc/systemd/system/"
+    destination = "/tmp"
+  }
+  
+  provisioner "shell" {
+    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
+    inline = [
+      "mv /tmp/*.service /etc/systemd/system",
+      "mv /tmp/*.timer /etc/systemd/system",
+      "mv /tmp/p4-* /usr/local/bin/sdp",
+      "mv /tmp/ansible-* /usr/local/bin/ansible",
+    ]
+  }
+
+  provisioner "shell" {
+    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
+    inline = [
+      "mv /usr/local/bin/sdp/p4-reset-sdp.sh /usr/local/bin/sdp/reset_sdp.sh"
+    ]
   }
 
   provisioner "shell" {
