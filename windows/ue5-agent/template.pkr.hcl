@@ -40,7 +40,7 @@ build {
 
   # Install Chocolatey packages
   provisioner "file" {
-    source      = "${path.module}/files/packages.config"
+    source      = "${path.root}/files/packages.config"
     destination = "D:/packages.config"
   }
 
@@ -52,7 +52,7 @@ build {
 
   # Azure PowerShell Modules
   provisioner "powershell" {
-    script = "${path.module}/files/install-azure-powershell.ps1"
+    script = "${path.root}/files/install-azure-powershell.ps1"
   }
 
   provisioner "windows-restart" {}

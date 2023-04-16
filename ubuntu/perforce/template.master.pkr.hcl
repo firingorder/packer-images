@@ -23,7 +23,7 @@ build {
   source "azure-arm.master" {}
 
   provisioner "shell" {
-    script = "${path.module}/files/p4-install.sh"
+    script = "${path.root}/files/p4-install.sh"
   }
 
   provisioner "shell" {
@@ -34,7 +34,7 @@ build {
   }
 
   provisioner "file" {
-    content = templatefile("${path.module}/files/p4-config.pkrtpl.hcl", {
+    content = templatefile("${path.root}/files/p4-config.pkrtpl.hcl", {
       INSTANCE    = 1
       SERVER_ID   = ""
       SERVER_TYPE = "p4d_master"
@@ -43,22 +43,22 @@ build {
   }
 
   provisioner "file" {
-    source      = "${path.module}/files/p4-reset-sdp.sh"
+    source      = "${path.root}/files/p4-reset-sdp.sh"
     destination = "/usr/local/bin/sdp/reset_sdp.sh"
   }
 
   provisioner "file" {
-    source      = "${path.module}/files/p4-bootstrap.sh"
+    source      = "${path.root}/files/p4-bootstrap.sh"
     destination = "/usr/local/bin/sdp/"
   }
 
   provisioner "file" {
-    source      = "${path.module}/files/ansible-configure-helix.sh"
+    source      = "${path.root}/files/ansible-configure-helix.sh"
     destination = "/usr/local/bin/ansible/"
   }
 
   provisioner "file" {
-    content = templatefile("${path.module}/files/ansible-hosts.pkrtpl.hcl", {
+    content = templatefile("${path.root}/files/ansible-hosts.pkrtpl.hcl", {
       INSTANCE = 1
     })
     destination = "/usr/local/bin/ansible/hosts.ini"
@@ -66,9 +66,9 @@ build {
 
   provisioner "file" {
     sources = [
-      "${path.module}/files/p4-bootstrap.service",
-      "${path.module}/files/ansible-configure-helix.service",
-      "${path.module}/files/ansible-configure-helix.timer",
+      "${path.root}/files/p4-bootstrap.service",
+      "${path.root}/files/ansible-configure-helix.service",
+      "${path.root}/files/ansible-configure-helix.timer",
     ]
     destination = "/etc/systemd/system/"
   }
