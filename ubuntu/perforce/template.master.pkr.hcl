@@ -21,6 +21,7 @@ build {
   source "azure-arm.master" {}
 
   provisioner "shell" {
+    execute_command = ["chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"]
     script = "${path.root}/files/p4-install.sh"
   }
 
