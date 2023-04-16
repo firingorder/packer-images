@@ -58,7 +58,7 @@ build {
       # Ansible
       "${path.root}/files/ansible-configure-helix.sh",
       # P4
-      "${path.root}/files/p4-bootstrap.sh"
+      "${path.root}/files/p4-bootstrap.sh",
       "${path.root}/files/p4-reset-sdp.sh"
     ]
     destination = "/tmp"
