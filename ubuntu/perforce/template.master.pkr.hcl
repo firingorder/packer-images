@@ -13,15 +13,17 @@ source "azure-arm" "master" {
   managed_image_resource_group_name = var.artifacts_resource_group
   managed_image_name                = "perforce-master-${var.source_image_sku}-${var.source_image_version}"
 
-  // shared_image_gallery_destination {
-  //   subscription         = var.subscription_id
-  //   resource_group       = var.gallery_resource_group
-  //   gallery_name         = var.gallery_name
-  //   image_name           = "perforce-master"
-  //   image_version        = var.source_image_version
-  //   replication_regions  = []
-  //   storage_account_type = "Standard_LRS"
-  // }
+  shared_image_gallery_destination {
+    subscription         = var.subscription_id
+    resource_group       = var.gallery_resource_group
+    gallery_name         = var.gallery_name
+    image_name           = "perforce-master"
+    image_version        = var.source_image_version
+    replication_regions  = [
+      "ukwest"
+    ]
+    storage_account_type = "Standard_LRS"
+  }
 
   build_resource_group_name = var.build_resource_group
   vm_size                   = local.vm_size
