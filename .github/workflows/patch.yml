@@ -8,6 +8,7 @@ jobs:
   patch:
     uses: ./.github/workflows/packer.yml
     strategy:
+      fail-fast: false
       matrix:
         image:
         - windows/ue5-agent
