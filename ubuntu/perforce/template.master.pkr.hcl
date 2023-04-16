@@ -39,14 +39,14 @@ build {
       SERVER_ID   = ""
       SERVER_TYPE = "p4d_master"
     })
-    destination = "/usr/local/bin/sdp/sdp.cfg"
+    destination = "/tmp/p4-sdp.cfg"
   }
 
   provisioner "file" {
     content = templatefile("files/ansible-hosts.pkrtpl.hcl", {
       INSTANCE = 1
     })
-    destination = "/usr/local/bin/ansible/hosts.ini"
+    destination = "/tmp/ansible-hosts.ini"
   }
 
   provisioner "file" {
@@ -78,6 +78,8 @@ build {
     execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
     inline = [
       "mv /usr/local/bin/sdp/p4-reset-sdp.sh /usr/local/bin/sdp/reset_sdp.sh"
+      "mv /usr/local/bin/sdp/p4-sdp.cfg /usr/local/bin/sdp/sdp.cfg"
+      "mv /usr/local/bin/ansible/ansible-hosts.ini /usr/local/bin/ansible/hosts.ini"
     ]
   }
 
