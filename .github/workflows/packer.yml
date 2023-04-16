@@ -25,6 +25,10 @@ on:
         required: true
       packer_build_resource_group:
         required: true
+      packer_gallery_resource_group:
+        required: true
+      packer_gallery_name:
+        required: true
 
 jobs:
   check_manifest:
