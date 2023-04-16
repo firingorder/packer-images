@@ -57,7 +57,7 @@ variable "gallery_resource_group" {
   description = "Azure Gallery Resource Group Name."
 }
 
-variable "gallery_resource_name" {
+variable "gallery_name" {
   type = string
   description = "Azure Gallery Name."
 }
