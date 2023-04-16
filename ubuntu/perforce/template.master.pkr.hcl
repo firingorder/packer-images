@@ -21,11 +21,12 @@ build {
   source "azure-arm.master" {}
 
   provisioner "shell" {
-    execute_command = ["chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"]
-    script = "${path.root}/files/p4-install.sh"
+    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
+    script          = "${path.root}/files/p4-install.sh"
   }
 
   provisioner "shell" {
+    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
     inline = [
       "mkdir -p /usr/local/bin/sdp",
       "mkdir -p /usr/local/bin/ansible",
@@ -73,6 +74,7 @@ build {
   }
 
   provisioner "shell" {
+    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
     inline = [
       "/usr/sbin/waagent -force -deprovision+user",
       "export HISTSIZE=0",
