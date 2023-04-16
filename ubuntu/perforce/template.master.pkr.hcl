@@ -1,4 +1,4 @@
-source "azure-arm" "leader" {
+source "azure-arm" "master" {
   ssh_username = "root"
 
   client_id       = var.client_id
@@ -20,7 +20,7 @@ source "azure-arm" "leader" {
 }
 
 build {
-  source "azure-arm.leader" {}
+  source "azure-arm.master" {}
 
   provisioner "shell" {
     script = "files/p4-install.sh"
