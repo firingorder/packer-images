@@ -16,11 +16,11 @@ timeout 600 /bin/bash -c \
 if [ -f "$INSTALLER_DIR/reset_sdp.sh" ]; then
     echo "Installing Perforce SDP from: $INSTALLER_DIR"
     bash $INSTALLER_SCRIPT -c $INSTALLER_SETTINGS_FILE -fast 2>&1 | tee $INSTALLER_LOG_FILE
-    sudo -u perforce bash -c 'source /p4/common/bin/p4_vars ${INSTANCE};echo $(p4d -Gf) | sed -r "s/^Fingerprint: //" > $P4SSLDIR/fingerprint.txt'
+    sudo -u perforce bash -c 'source /p4/common/bin/p4_vars ${INSTANCE};echo $(p4d -Gf) | if [ -n $P4SSLDIR ]; then sed -r "s/^Fingerprint: //" > $P4SSLDIR/fingerprint.txt; fi'
 fi
 
 # configure ansible controller
 if [ -d "$ANSIBLE_DIR" ]; then
-    chown -R perforce:p4admin $ANSIBLE_DIR
-    systemctl enable --now p4-configure-helix.timer
+    chown -R p4admin:perforce $ANSIBLE_DIR
+    systemctl enable --now ansible-configure-helix.timer
 fi
