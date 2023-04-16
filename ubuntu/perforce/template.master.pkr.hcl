@@ -61,7 +61,7 @@ build {
       "${path.root}/files/p4-bootstrap.sh",
       "${path.root}/files/p4-reset-sdp.sh"
     ]
-    destination = "/tmp"
+    destination = "/tmp/"
   }
   
   provisioner "shell" {
