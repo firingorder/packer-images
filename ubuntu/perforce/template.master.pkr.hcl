@@ -19,6 +19,7 @@ source "azure-arm" "master" {
     gallery_name         = var.gallery_name
     image_name           = "perforce-master"
     image_version        = var.source_image_version
+    replication_regions  = []
     storage_account_type = "Standard_LRS"
   }
 
