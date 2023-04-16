@@ -34,7 +34,7 @@ build {
   }
 
   provisioner "file" {
-    content = templatefile("${path.root}/files/p4-cfg.pkrtpl.hcl", {
+    content = templatefile("files/p4-cfg.pkrtpl.hcl", {
       INSTANCE    = 1
       SERVER_ID   = ""
       SERVER_TYPE = "p4d_master"
@@ -58,7 +58,7 @@ build {
   }
 
   provisioner "file" {
-    content = templatefile("${path.root}/files/ansible-hosts.pkrtpl.hcl", {
+    content = templatefile("files/ansible-hosts.pkrtpl.hcl", {
       INSTANCE = 1
     })
     destination = "/usr/local/bin/ansible/hosts.ini"
