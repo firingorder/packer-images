@@ -3,7 +3,13 @@ set -ex
 
 export HOME=/root
 
-IP=$(ip addr show ens4 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+wget -qO - https://package.perforce.com/perforce.pubkey | sudo apt-key add -
+
+cat <<EOF | sudo tee /etc/apt/sources.list.d/perforce.list
+deb http://package.perforce.com/apt/ubuntu focal release
+EOF
+
+IP=$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
 echo $IP > /etc/oldip
 
 hostname perforce
