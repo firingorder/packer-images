@@ -13,7 +13,7 @@ source "azure-arm" "master" {
   managed_image_resource_group_name = var.artifacts_resource_group
   managed_image_name                = "perforce-master-${var.source_image_sku}-${var.source_image_version}"
 
-  shared_image_gallery_destination = {
+  shared_image_gallery_destination {
     subscription =  var.subscription_id,
     resource_group =  var.gallery_resource_group,
     gallery_name = var.gallery_name,
