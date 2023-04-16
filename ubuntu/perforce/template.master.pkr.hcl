@@ -72,4 +72,12 @@ build {
     ]
     destination = "/etc/systemd/system/"
   }
+
+  provisioner "shell" {
+    inline = [
+      "/usr/sbin/waagent -force -deprovision+user",
+      "export HISTSIZE=0",
+      "sync"
+    ]
+  }
 }
