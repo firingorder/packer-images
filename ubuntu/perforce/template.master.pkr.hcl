@@ -14,13 +14,13 @@ source "azure-arm" "master" {
   managed_image_name                = "perforce-master-${var.source_image_sku}-${var.source_image_version}"
 
   shared_image_gallery_destination {
-    subscription =  var.subscription_id,
-    resource_group =  var.gallery_resource_group,
-    gallery_name = var.gallery_name,
-    image_name = "perforce-master",
-    image_version = var.source_image_version,
+    subscription         = var.subscription_id
+    resource_group       = var.gallery_resource_group
+    gallery_name         = var.gallery_name
+    image_name           = "perforce-master"
+    image_version        = var.source_image_version
     storage_account_type = "Standard_LRS"
-}
+  }
 
   build_resource_group_name = var.build_resource_group
   vm_size                   = local.vm_size
@@ -72,7 +72,7 @@ build {
     ]
     destination = "/tmp/"
   }
-  
+
   provisioner "shell" {
     execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
     inline = [

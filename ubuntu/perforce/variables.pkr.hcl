@@ -53,11 +53,11 @@ variable "source_image_version" {
 }
 
 variable "gallery_resource_group" {
-  type = string
+  type        = string
   description = "Azure Gallery Resource Group Name."
 }
 
 variable "gallery_name" {
-  type = string
+  type        = string
   description = "Azure Gallery Name."
 }
