@@ -1,10 +1,10 @@
 [Unit]
 Description=Run ansible-pull to get common server configuration
-Requires=p4-configure-helix.timer
+Requires=ansible-configure-helix.timer
       
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/ansible/p4-configure-helix.sh
+ExecStart=/usr/local/bin/ansible/ansible-configure-helix.sh
 User=perforce
 Group=p4admin
       

@@ -3,7 +3,7 @@ set -ex
 
 ANSIBLE_DIR=/usr/local/bin/ansible
 
-INSTALLER_DIR=/usr/local/bin/sdp/reset
+INSTALLER_DIR=/usr/local/bin/sdp
 INSTALLER_SCRIPT=$INSTALLER_DIR/reset_sdp.sh
 INSTALLER_SETTINGS_FILE=$INSTALLER_DIR/sdp.cfg
 INSTALLER_LOG_FILE=/var/log/sdp-reset.log
