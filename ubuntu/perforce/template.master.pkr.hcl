@@ -34,6 +34,7 @@ build {
   }
 
   provisioner "file" {
+    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
     content = templatefile("files/p4-cfg.pkrtpl.hcl", {
       INSTANCE    = 1
       SERVER_ID   = ""
@@ -43,21 +44,25 @@ build {
   }
 
   provisioner "file" {
+    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
     source      = "${path.root}/files/p4-reset-sdp.sh"
     destination = "/usr/local/bin/sdp/reset_sdp.sh"
   }
 
   provisioner "file" {
+    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
     source      = "${path.root}/files/p4-bootstrap.sh"
     destination = "/usr/local/bin/sdp/"
   }
 
   provisioner "file" {
+    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
     source      = "${path.root}/files/ansible-configure-helix.sh"
     destination = "/usr/local/bin/ansible/"
   }
 
   provisioner "file" {
+    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
     content = templatefile("files/ansible-hosts.pkrtpl.hcl", {
       INSTANCE = 1
     })
@@ -65,6 +70,7 @@ build {
   }
 
   provisioner "file" {
+    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
     sources = [
       "${path.root}/files/p4-bootstrap.service",
       "${path.root}/files/ansible-configure-helix.service",
