@@ -120,7 +120,7 @@ build {
   }
 
   post-processor "manifest" {
-    output     = "${path.root}/output.json"
+    output     = "${path.root}/manifest.json"
     strip_path = true
   }
 }
