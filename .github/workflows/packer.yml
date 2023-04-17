@@ -174,9 +174,9 @@ jobs:
         inlineScript: |
           images="${{ steps.fetch_images.outputs.value }}"
           for image in $images; do
-            echo "Removing managed image: $image"
+            echo "Removing managed image: $image, from ${{ secrets.packer_subscription_id }}/${{ secrets.packer_artifacts_resource_group }}"
             az image delete \
-              -n "$image" \
-              -g "${{ secrets.packer_artifacts_resource_group }}" \
-              --subscription "${{ secrets.packer_subscription_id }}"
+              -n $image \
+              -g ${{ secrets.packer_artifacts_resource_group }} \
+              --subscription ${{ secrets.packer_subscription_id }}
           done
