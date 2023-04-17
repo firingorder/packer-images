@@ -159,3 +159,19 @@ jobs:
         PKR_VAR_source_image_version: ${{ needs.latest_version.outputs.version }}
         PKR_VAR_gallery_resource_group: ${{ secrets.packer_gallery_resource_group }}
         PKR_VAR_gallery_name: ${{ secrets.packer_gallery_name }}
+
+    - name: Fetch managed image(s)
+      id: fetch_mi
+      uses: sergeysova/jq-action@v2
+      with:
+        cmd: 'jq .builds ${{ inputs.image_directory }}/output.json -r'
+
+    - name: Clean up managed image(s)
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.34.1
+        inlineScript: |
+          az image delete \
+            -n "${{ steps.fetch_offer.outputs.value[-1].artifact_id }}" \
+            -g "${{ secrets.packer_artifacts_resource_group }}" \
+            --subscription "${{ secrets.packer_subscription_id }}"

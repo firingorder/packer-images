@@ -119,9 +119,9 @@ build {
     ]
   }
 
-  post-processor "shell-local" { # Remove Managed Image
-    inline = [
-      "az image delete -n ${local.managed_image_name} -g ${var.artifacts_resource_group} --subscription ${var.subscription_id}"
-    ]
+  post-processor "manifest" {
+      output = "output.json"
+      strip_path = true
+      custom_data = {}
   }
 }
