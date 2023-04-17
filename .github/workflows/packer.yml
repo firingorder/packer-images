@@ -172,6 +172,7 @@ jobs:
     name: Clean Packer Managed Image(s)
     runs-on: ubuntu-latest
     needs: [check_manifest, latest_version, check_image_exists, build]
+    if: always() && (inputs.force_build == true || needs.check_image_exists.outputs.exists == false)
     strategy:
       matrix:
         image: ${{ needs.build.outputs.managed_images }}
