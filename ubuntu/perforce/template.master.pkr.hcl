@@ -1,12 +1,9 @@
 locals {
-  image_version      = "0.0.3"
   image_offer        = "Perforce"
   image_sku          = "Master"
   image_os           = "Linux"
   image_name         = "${local.image_offer}-${local.image_sku}-${local.image_os}"
-  managed_image_name = "${lower(local.image_name)}-${local.image_version}"
-
-  timestamp = regex_replace(timestamp(), "[- TZ:]", "")
+  managed_image_name = "${lower(local.image_name)}-${formatdate("YYYY.MM.DDhhmmss"), timestamp()}"
 }
 
 source "azure-arm" "master" {
@@ -22,7 +19,7 @@ source "azure-arm" "master" {
   image_version   = var.source_image_version
 
   managed_image_resource_group_name = var.artifacts_resource_group
-  managed_image_name                = "${local.managed_image_name}-${local.timestamp}"
+  managed_image_name                = local.managed_image_name
 
   shared_image_gallery_destination {
     subscription         = var.subscription_id
