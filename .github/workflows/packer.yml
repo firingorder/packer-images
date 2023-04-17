@@ -175,5 +175,5 @@ jobs:
           images="${{ steps.fetch_images.outputs.value }}"
           for image in $images; do
             echo "Removing managed image: $image"
-            az image delete -ids $image
+            az image delete --ids $image
           done
