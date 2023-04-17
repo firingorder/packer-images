@@ -122,6 +122,5 @@ build {
   post-processor "manifest" {
       output = "output.json"
       strip_path = true
-      custom_data = {}
   }
 }
