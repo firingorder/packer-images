@@ -5,6 +5,8 @@ locals {
   image_os           = "Linux"
   image_name         = "${local.image_offer}-${local.image_sku}-${local.image_os}"
   managed_image_name = "${lower(local.image_name)}-${local.image_version}"
+
+  timestamp = regex_replace(timestamp(), "[- TZ:]", "")
 }
 
 source "azure-arm" "master" {
@@ -20,14 +22,14 @@ source "azure-arm" "master" {
   image_version   = var.source_image_version
 
   managed_image_resource_group_name = var.artifacts_resource_group
-  managed_image_name                = local.managed_image_name
+  managed_image_name                = "${local.managed_image_name}-${local.timestamp}"
 
   shared_image_gallery_destination {
     subscription         = var.subscription_id
     resource_group       = var.gallery_resource_group
     gallery_name         = var.gallery_name
     image_name           = local.image_name
-    image_version        = local.image_version
+    image_version        = local.timestamp
     storage_account_type = "Standard_LRS"
     replication_regions = [
       "ukwest"
@@ -120,7 +122,7 @@ build {
   }
 
   post-processor "manifest" {
-      output = "${path.root}/output.json"
-      strip_path = false
+    output     = "${path.root}/output.json"
+    strip_path = false
   }
 }

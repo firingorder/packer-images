@@ -160,11 +160,6 @@ jobs:
         PKR_VAR_gallery_resource_group: ${{ secrets.packer_gallery_resource_group }}
         PKR_VAR_gallery_name: ${{ secrets.packer_gallery_name }}
 
-    - name: Root Dir
-      run: echo $(ls -la)
-    - name: Perforce Dir
-      run: echo $(ls -la ${{ inputs.image_directory }})
-
     - name: Fetch managed image(s)
       id: fetch_images
       uses: sergeysova/jq-action@v2
