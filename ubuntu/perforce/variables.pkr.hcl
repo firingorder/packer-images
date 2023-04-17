@@ -61,8 +61,3 @@ variable "gallery_name" {
   type        = string
   description = "Azure Gallery Name."
 }
-
-variable "gallery_build" {
-  type        = string
-  description = "Build Id/Version to associate with the image in the Azure Gallery."
-}

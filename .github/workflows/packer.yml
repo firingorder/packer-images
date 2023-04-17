@@ -128,6 +128,11 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.packer_azure_credentials }}
+
     - name: Validate Packer Template
       uses: hashicorp/packer-github-actions@master
       with:
@@ -154,4 +159,3 @@ jobs:
         PKR_VAR_source_image_version: ${{ needs.latest_version.outputs.version }}
         PKR_VAR_gallery_resource_group: ${{ secrets.packer_gallery_resource_group }}
         PKR_VAR_gallery_name: ${{ secrets.packer_gallery_name }}
-        PKR_VAR_gallery_build: ${{ github.sha }}

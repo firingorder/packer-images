@@ -1,8 +1,10 @@
 locals {
-  image_offer = "Perforce"
-  image_sku   = "Master"
-  image_os    = "Linux"
-  image_name  = "${local.image_offer}-${local.image_sku}-${local.image_os}"
+  image_version      = "0.0.2"
+  image_offer        = "Perforce"
+  image_sku          = "Master"
+  image_os           = "Linux"
+  image_name         = "${local.image_offer}-${local.image_sku}-${local.image_os}"
+  managed_image_name = "${lower(local.image_name)}-${local.image_version}"
 }
 
 source "azure-arm" "master" {
@@ -18,14 +20,14 @@ source "azure-arm" "master" {
   image_version   = var.source_image_version
 
   managed_image_resource_group_name = var.artifacts_resource_group
-  managed_image_name                = lower(local.image_name)
+  managed_image_name                = local.managed_image_name
 
   shared_image_gallery_destination {
     subscription         = var.subscription_id
     resource_group       = var.gallery_resource_group
     gallery_name         = var.gallery_name
     image_name           = local.image_name
-    image_version        = "0.0.1"
+    image_version        = local.image_version
     storage_account_type = "Standard_LRS"
     replication_regions = [
       "ukwest"
@@ -114,6 +116,13 @@ build {
       "/usr/sbin/waagent -force -deprovision+user",
       "export HISTSIZE=0",
       "sync"
+    ]
+  }
+
+  post-processor "rm" { # Remove Managed Image
+    type = "shell-local"
+    inline = [
+      "az image delete -n ${local.managed_image_name} -g ${var.artifacts_resource_group} --subscription ${var.subscription_id}"
     ]
   }
 }
