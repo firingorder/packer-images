@@ -125,7 +125,7 @@ jobs:
     needs: [check_manifest, latest_version, check_image_exists]
     if: always() && (inputs.force_build == true || needs.check_image_exists.outputs.exists == false)
     outputs:
-      managed_images: ${{ steps.fetch_images.outputs.values }}
+      managed_images: ${{ steps.fetch_images.outputs.value }}
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
@@ -166,7 +166,7 @@ jobs:
       id: fetch_images
       uses: sergeysova/jq-action@v2
       with:
-        cmd: echo 'values=$(jq [ .builds[].artifact_id ] ${{ inputs.image_directory }}/output.json -r)' >> $GITHUB_OUTPUT
+        cmd: jq .builds[].artifact_id ${{ inputs.image_directory }}/output.json -r
 
   clean:
     name: Clean Packer Managed Image(s)
