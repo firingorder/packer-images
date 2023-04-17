@@ -183,3 +183,4 @@ jobs:
               -n "$image" \
               -g "${{ secrets.packer_artifacts_resource_group }}" \
               --subscription "${{ secrets.packer_subscription_id }}"
+          done
