@@ -25,7 +25,7 @@ source "azure-arm" "master" {
     resource_group       = var.gallery_resource_group
     gallery_name         = var.gallery_name
     image_name           = local.image_name
-    image_version        = "${var.source_image_version}.${var.gallery_build}"
+    image_version        = "0.0.1"
     storage_account_type = "Standard_LRS"
     replication_regions = [
       "ukwest"
