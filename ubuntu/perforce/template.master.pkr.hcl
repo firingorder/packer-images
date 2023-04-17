@@ -2,7 +2,7 @@ locals {
   image_offer        = "Perforce"
   image_sku          = "Master"
   image_os           = "Linux"
-  image_name         = "${var.image_offer}-${local.image_sku}-${local.image_os}"
+  image_name         = "${local.image_offer}-${local.image_sku}-${local.image_os}"
   managed_image_name = "${lower(local.image_name)}-${local.image_version}"
 }
 
