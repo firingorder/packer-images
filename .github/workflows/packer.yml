@@ -165,11 +165,11 @@ jobs:
     - name: Perforce Dir
       run: echo $(ls -la ${{ inputs.image_directory }})
 
-    - name: Fetch created image(s)
+    - name: Fetch managed image(s)
       id: fetch_images
       uses: sergeysova/jq-action@v2
       with:
-        cmd: 'jq .builds[].artifact_id ${{ inputs.image_directory }}/output.json -r'
+        cmd: 'jq [.builds[].artifact_id] ${{ inputs.image_directory }}/output.json -r'
         multiline: true
 
     - name: Clean up managed image(s)
