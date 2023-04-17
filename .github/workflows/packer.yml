@@ -46,19 +46,19 @@ jobs:
       id: fetch_publisher
       uses: sergeysova/jq-action@v2
       with:
-        cmd: 'jq .publisher ${{ inputs.image_directory }}/source.json -r'
+        cmd: 'jq .source_image_publisher ${{ inputs.image_directory }}/variables.json -r'
 
     - name: Fetch Offer
       id: fetch_offer
       uses: sergeysova/jq-action@v2
       with:
-        cmd: 'jq .offer ${{ inputs.image_directory }}/source.json -r'
+        cmd: 'jq .source_image_offer ${{ inputs.image_directory }}/variables.json -r'
 
     - name: Fetch SKU
       id: fetch_sku
       uses: sergeysova/jq-action@v2
       with:
-        cmd: 'jq .sku ${{ inputs.image_directory }}/source.json -r'
+        cmd: 'jq .source_image_sku ${{ inputs.image_directory }}/variables.json -r'
 
   latest_version:
     name: Get latest version from Azure
@@ -144,7 +144,7 @@ jobs:
       uses: hashicorp/packer-github-actions@master
       with:
         command: build
-        arguments: -color=false -force
+        arguments: -color=false -var-file=./${{ inputs.image_directory }}/variables.json
         target: ./${{ inputs.image_directory }}
       env:
         PKR_VAR_client_id: ${{ secrets.packer_client_id }}
@@ -153,9 +153,6 @@ jobs:
         PKR_VAR_tenant_id: ${{ secrets.packer_tenant_id }}
         PKR_VAR_artifacts_resource_group: ${{ secrets.packer_artifacts_resource_group }}
         PKR_VAR_build_resource_group: ${{ secrets.packer_build_resource_group }}
-        PKR_VAR_source_image_publisher: ${{ needs.check_source.outputs.publisher }}
-        PKR_VAR_source_image_offer: ${{ needs.check_source.outputs.offer }}
-        PKR_VAR_source_image_sku: ${{ needs.check_source.outputs.sku }}
         PKR_VAR_source_image_version: ${{ needs.latest_version.outputs.version }}
         PKR_VAR_gallery_resource_group: ${{ secrets.packer_gallery_resource_group }}
         PKR_VAR_gallery_name: ${{ secrets.packer_gallery_name }}

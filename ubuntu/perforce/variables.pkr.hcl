@@ -61,3 +61,18 @@ variable "gallery_name" {
   type        = string
   description = "Azure Gallery Name."
 }
+
+variable "gallery_image_offer" {
+  type        = string
+  description = "Linux Image Offer."
+}
+
+variable "gallery_image_sku" {
+  type        = string
+  description = "Linux Image SKU."
+}
+
+variable "gallery_image_os" {
+  type        = string
+  description = "Linux Image SKU."
+}
