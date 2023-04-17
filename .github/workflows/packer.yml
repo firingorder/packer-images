@@ -124,6 +124,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [check_manifest, latest_version, check_image_exists]
     if: always() && (inputs.force_build == true || needs.check_image_exists.outputs.exists == false)
+    outputs:
+      managed_images: ${{ steps.fetch_images.outputs.values }}
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
@@ -160,18 +162,26 @@ jobs:
         PKR_VAR_gallery_resource_group: ${{ secrets.packer_gallery_resource_group }}
         PKR_VAR_gallery_name: ${{ secrets.packer_gallery_name }}
 
-    - name: Fetch managed image(s)
-      id: fetch_mi
+    - name: Fetch created image(s)
+      id: fetch_images
       uses: sergeysova/jq-action@v2
       with:
-        cmd: 'jq .builds ${{ inputs.image_directory }}/output.json -r'
+        cmd: echo 'values=$(jq [ .builds[].artifact_id ] ${{ inputs.image_directory }}/output.json -r)' >> $GITHUB_OUTPUT
 
+  clean:
+    name: Clean Packer Managed Image(s)
+    runs-on: ubuntu-latest
+    needs: [check_manifest, latest_version, check_image_exists, build]
+    strategy:
+      matrix:
+        image: ${{ needs.build.outputs.managed_images }}
+    steps:
     - name: Clean up managed image(s)
       uses: azure/CLI@v1
       with:
         azcliversion: 2.34.1
         inlineScript: |
           az image delete \
-            -n "${{ steps.fetch_mi.outputs.value[-1].artifact_id }}" \
+            -n "${{ matrix.image }}" \
             -g "${{ secrets.packer_artifacts_resource_group }}" \
             --subscription "${{ secrets.packer_subscription_id }}"

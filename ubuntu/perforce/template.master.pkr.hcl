@@ -1,5 +1,5 @@
 locals {
-  image_version      = "0.0.2"
+  image_version      = "0.0.3"
   image_offer        = "Perforce"
   image_sku          = "Master"
   image_os           = "Linux"
