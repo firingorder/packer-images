@@ -1,4 +1,4 @@
-local {
+locals {
   image_name = "Perforce-Master-Linux"
 }
 
@@ -24,7 +24,7 @@ source "azure-arm" "master" {
     image_name           = local.image_name
     image_version        = "${var.source_image_version}/${var.gallery_build}"
     storage_account_type = "Standard_LRS"
-    replication_regions  = [
+    replication_regions = [
       "ukwest"
     ]
   }
@@ -33,8 +33,8 @@ source "azure-arm" "master" {
   vm_size                   = local.vm_size
 
   azure_tags = {
-    os_type = "Linux"
-    os_version = var.source_image_version
+    os_type       = "Linux"
+    os_version    = var.source_image_version
     build_version = var.gallery_build
   }
 }
