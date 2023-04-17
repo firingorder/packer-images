@@ -173,7 +173,5 @@ jobs:
         azcliversion: 2.34.1
         inlineScript: |
           images="${{ steps.fetch_images.outputs.value }}"
-          for image in $images; do
-            echo "Removing managed image: $image"
-            az image delete --ids $image
-          done
+          echo "Removing managed images: $images"
+          az image delete --ids $images
