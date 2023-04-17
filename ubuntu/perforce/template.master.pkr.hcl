@@ -1,9 +1,11 @@
 locals {
+  image_version = formatdate("YYYY.MM.DDhhmmss", timestamp())
   image_offer        = "Perforce"
   image_sku          = "Master"
   image_os           = "Linux"
   image_name         = "${local.image_offer}-${local.image_sku}-${local.image_os}"
-  managed_image_name = "${lower(local.image_name)}-${formatdate("YYYY.MM.DDhhmmss", timestamp())}"
+  managed_image_name = "${lower(local.image_name)}-${local.image_version}
+  }"
 }
 
 source "azure-arm" "master" {
