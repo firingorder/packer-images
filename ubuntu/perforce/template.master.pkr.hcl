@@ -119,8 +119,7 @@ build {
     ]
   }
 
-  post-processor "rm" { # Remove Managed Image
-    type = "shell-local"
+  post-processor "shell-local" { # Remove Managed Image
     inline = [
       "az image delete -n ${local.managed_image_name} -g ${var.artifacts_resource_group} --subscription ${var.subscription_id}"
     ]
