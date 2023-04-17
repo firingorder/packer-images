@@ -179,6 +179,7 @@ jobs:
         inlineScript: |
           images="${{ steps.fetch_images.outputs.value }}"
           for image in $images; do
+            echo "Deleing managed image: $image"
             az image delete \
               -n "$image" \
               -g "${{ secrets.packer_artifacts_resource_group }}" \
