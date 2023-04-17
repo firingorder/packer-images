@@ -40,7 +40,7 @@ source "azure-arm" "master" {
   azure_tags = {
     os_type       = local.image_os
     os_version    = var.source_image_version
-    build_version = var.gallery_build
+    build_version = local.image_version
   }
 }
 
