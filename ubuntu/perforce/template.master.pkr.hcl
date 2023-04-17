@@ -1,6 +1,8 @@
 locals {
-  image_version      = formatdate("YYYY.MM.DDhhmmss", timestamp())
-  image_name         = "${var.gallery_image_offer}-${var.gallery_image_sku}-${var.gallery_image_os}"
+  image_offer        = "Perforce"
+  image_sku          = "Master"
+  image_os           = "Linux"
+  image_name         = "${var.image_offer}-${local.image_sku}-${local.image_os}"
   managed_image_name = "${lower(local.image_name)}-${local.image_version}"
 }
 
@@ -35,9 +37,9 @@ source "azure-arm" "master" {
   vm_size                   = local.vm_size
 
   azure_tags = {
-    source_image_os       = var.gallery_image_os
-    source_image_version  = var.source_image_version
-    gallery_image_version = local.image_version
+    os_type       = local.image_os
+    os_version    = var.source_image_version
+    build_version = local.image_version
   }
 }
 

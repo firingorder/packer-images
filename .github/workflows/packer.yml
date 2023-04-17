@@ -35,9 +35,9 @@ jobs:
     name: Fetch image from source file
     runs-on: ubuntu-latest
     outputs:
-      publisher: ${{ steps.fetch_publisher.outputs.value }}
-      offer: ${{ steps.fetch_offer.outputs.value }}
-      sku: ${{ steps.fetch_sku.outputs.value }}
+      source_image_publisher: ${{ steps.fetch_publisher.outputs.value }}
+      source_image_offer: ${{ steps.fetch_offer.outputs.value }}
+      source_image_sku: ${{ steps.fetch_sku.outputs.value }}
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
@@ -46,19 +46,19 @@ jobs:
       id: fetch_publisher
       uses: sergeysova/jq-action@v2
       with:
-        cmd: 'jq .source_image_publisher ${{ inputs.image_directory }}/variables.json -r'
+        cmd: 'jq .source_image_publisher ${{ inputs.image_directory }}/source.json -r'
 
     - name: Fetch Offer
       id: fetch_offer
       uses: sergeysova/jq-action@v2
       with:
-        cmd: 'jq .source_image_offer ${{ inputs.image_directory }}/variables.json -r'
+        cmd: 'jq .source_image_offer ${{ inputs.image_directory }}/source.json -r'
 
     - name: Fetch SKU
       id: fetch_sku
       uses: sergeysova/jq-action@v2
       with:
-        cmd: 'jq .source_image_sku ${{ inputs.image_directory }}/variables.json -r'
+        cmd: 'jq .source_image_sku ${{ inputs.image_directory }}/source.json -r'
 
   latest_version:
     name: Get latest version from Azure
@@ -80,13 +80,13 @@ jobs:
         inlineScript: |
           latest_version=$(
             az vm image show \
-              --urn "${{ needs.check_source.outputs.publisher }}:${{ needs.check_source.outputs.offer }}:${{ needs.check_source.outputs.sku }}:latest" \
+              --urn "${{ needs.check_source.outputs.source_image_publisher }}:${{ needs.check_source.outputs.source_image_offer }}:${{ needs.check_source.outputs.source_image_sku }}:latest" \
               --query name \
               --out tsv
           )
-          echo "Publisher: ${{ needs.check_source.outputs.publisher }}"
-          echo "Offer:     ${{ needs.check_source.outputs.offer }}"
-          echo "SKU:       ${{ needs.check_source.outputs.sku }}"
+          echo "Publisher: ${{ needs.check_source.outputs.source_image_publisher }}"
+          echo "Offer:     ${{ needs.check_source.outputs.source_image_offer }}"
+          echo "SKU:       ${{ needs.check_source.outputs.source_image_sku }}"
           echo "Version:   ${latest_version}"
           echo "version=${latest_version}" >> $GITHUB_OUTPUT
 
@@ -144,7 +144,7 @@ jobs:
       uses: hashicorp/packer-github-actions@master
       with:
         command: build
-        arguments: -color=false -var-file=./${{ inputs.image_directory }}/variables.json
+        arguments: -color=false -var-file=./${{ inputs.image_directory }}/source.json
         target: ./${{ inputs.image_directory }}
       env:
         PKR_VAR_client_id: ${{ secrets.packer_client_id }}
