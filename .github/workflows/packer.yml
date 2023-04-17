@@ -154,3 +154,4 @@ jobs:
         PKR_VAR_source_image_version: ${{ needs.latest_version.outputs.version }}
         PKR_VAR_gallery_resource_group: ${{ secrets.packer_gallery_resource_group }}
         PKR_VAR_gallery_name: ${{ secrets.packer_gallery_name }}
+        PKR_VAR_gallery_build: ${{ github.head_ref }}.${{ github.sha }}
