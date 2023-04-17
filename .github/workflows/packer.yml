@@ -172,6 +172,6 @@ jobs:
         azcliversion: 2.34.1
         inlineScript: |
           az image delete \
-            -n "${{ steps.fetch_offer.outputs.value[-1].artifact_id }}" \
+            -n "${{ steps.fetch_mi.outputs.value[-1].artifact_id }}" \
             -g "${{ secrets.packer_artifacts_resource_group }}" \
             --subscription "${{ secrets.packer_subscription_id }}"
