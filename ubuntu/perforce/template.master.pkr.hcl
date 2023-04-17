@@ -1,5 +1,8 @@
 locals {
-  image_name = "Perforce-Master-Linux"
+  image_offer = "Perforce"
+  image_sku   = "Master"
+  image_os    = "Linux"
+  image_name  = "${local.image_offer}-${local.image_sku}-${local.image_os}"
 }
 
 source "azure-arm" "master" {
@@ -22,7 +25,7 @@ source "azure-arm" "master" {
     resource_group       = var.gallery_resource_group
     gallery_name         = var.gallery_name
     image_name           = local.image_name
-    image_version        = "${var.source_image_version}/${var.gallery_build}"
+    image_version        = "${var.source_image_version}.${var.gallery_build}"
     storage_account_type = "Standard_LRS"
     replication_regions = [
       "ukwest"
@@ -33,7 +36,7 @@ source "azure-arm" "master" {
   vm_size                   = local.vm_size
 
   azure_tags = {
-    os_type       = "Linux"
+    os_type       = local.image_os
     os_version    = var.source_image_version
     build_version = var.gallery_build
   }
