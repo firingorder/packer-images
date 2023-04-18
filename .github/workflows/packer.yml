@@ -41,19 +41,16 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-
     - name: Fetch Publisher
       id: fetch_publisher
       uses: sergeysova/jq-action@v2
       with:
         cmd: 'jq .source_image_publisher ${{ inputs.image_directory }}/variables.json -r'
-
     - name: Fetch Offer
       id: fetch_offer
       uses: sergeysova/jq-action@v2
       with:
         cmd: 'jq .source_image_offer ${{ inputs.image_directory }}/variables.json -r'
-
     - name: Fetch SKU
       id: fetch_sku
       uses: sergeysova/jq-action@v2
@@ -71,7 +68,6 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.packer_azure_credentials }}
-
     - name: Get Latest Version
       id: get_latest_version
       uses: azure/CLI@v1
@@ -100,18 +96,15 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-
     - name: Azure Login
       uses: azure/login@v1
       with:
         creds: ${{ secrets.packer_azure_credentials }}
-
     - name: Fetch all images to check
       id: fetch_image_definitions
       uses: sergeysova/jq-action@v2
       with:
         cmd: 'jq .[] ${{ inputs.image_directory }}/build.json -r'
-
     - name: Check if all (latest) images exist
       id: get_image
       uses: azure/CLI@v1
@@ -124,13 +117,13 @@ jobs:
               --gallery-image-definition $definition \
               --gallery-name ${{ secrets.packer_gallery_name }} \
               --resource-group ${{ secrets.packer_gallery_resource_group }} | grep -q '${{ needs.latest_version.outputs.version }}'; then
+              echo "Detected missing image: $definition"
               image_exists=false
               break
             else
               image_exists=true
             fi
           done
-          echo "Image Exists: ${image_exists}"
           echo "exists=${image_exists}" >> $GITHUB_OUTPUT
 
   build:
@@ -141,19 +134,16 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-
     - name: Azure Login
       uses: azure/login@v1
       with:
         creds: ${{ secrets.packer_azure_credentials }}
-
     - name: Validate Packer Template
       uses: hashicorp/packer-github-actions@master
       with:
         command: validate
         arguments: -syntax-only
         target: ./${{ inputs.image_directory }}
-
     - name: Build Packer Image
       uses: hashicorp/packer-github-actions@master
       with:
@@ -171,14 +161,12 @@ jobs:
         PKR_VAR_gallery_resource_group: ${{ secrets.packer_gallery_resource_group }}
         PKR_VAR_gallery_name: ${{ secrets.packer_gallery_name }}
         PKR_VAR_git_commit: ${{ github.sha }}
-
     - name: Fetch managed image(s)
       id: managed_images
       uses: sergeysova/jq-action@v2
       with:
         cmd: 'jq .builds[].artifact_id ${{ inputs.image_directory }}/manifest.json -r'
         multiline: true
-
     - name: Clean up managed image(s)
       uses: azure/CLI@v1
       with:

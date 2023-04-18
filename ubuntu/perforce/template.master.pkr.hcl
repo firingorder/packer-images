@@ -34,7 +34,6 @@ source "azure-arm" "master" {
   vm_size                   = local.vm_size
 
   azure_tags = {
-    source_image_os       = local.image_os
     source_image_version  = var.source_image_version
     gallery_image_version = local.image_version
     gallery_image_commit  = var.git_commit
