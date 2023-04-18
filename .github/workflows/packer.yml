@@ -105,6 +105,7 @@ jobs:
       uses: sergeysova/jq-action@v2
       with:
         cmd: 'jq .[] ${{ inputs.image_directory }}/build.json -r'
+        multiline: true
     - name: Check if all (latest) images exist
       id: get_image
       uses: azure/CLI@v1
