@@ -17,6 +17,7 @@ jobs:
         - ubuntu/perforce
     with:
       image_directory: ${{ matrix.image }}
+      force_build: true
     secrets:
       packer_azure_credentials: ${{ secrets.PACKER_AZURE_CREDENTIALS }}
       packer_client_id: ${{ secrets.PACKER_CLIENT_ID }}

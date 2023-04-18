@@ -61,3 +61,8 @@ variable "gallery_name" {
   type        = string
   description = "Azure Gallery Name."
 }
+
+variable "git_commit" {
+  type        = string
+  description = "Git Commit hash associated with the build."
+}

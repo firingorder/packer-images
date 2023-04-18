@@ -1,8 +1,5 @@
 locals {
-  image_offer        = "Perforce"
-  image_sku          = "Master"
-  image_os           = "Linux"
-  image_name         = "${local.image_offer}-${local.image_sku}-${local.image_os}"
+  image_name         = "Perforce-Master-Linux"
   managed_image_name = "${lower(local.image_name)}-${local.image_version}"
 }
 
@@ -37,9 +34,10 @@ source "azure-arm" "master" {
   vm_size                   = local.vm_size
 
   azure_tags = {
-    os_type       = local.image_os
-    os_version    = var.source_image_version
-    build_version = local.image_version
+    source_image_os       = local.image_os
+    source_image_version  = var.source_image_version
+    gallery_image_version = local.image_version
+    gallery_image_commit  = var.git_commit
   }
 }
 

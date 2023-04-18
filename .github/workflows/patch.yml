@@ -1,0 +1,27 @@
+name: Patch
+
+on:
+  schedule:
+  - cron: '*/1 * * * *'
+
+jobs:
+  patch:
+    uses: ./.github/workflows/packer.yml
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+        #- windows/ue5-agent
+        #- ubuntu/k3s
+        - ubuntu/perforce
+    with:
+      image_directory: ${{ matrix.image }}
+      force_build: false
+    secrets:
+      packer_azure_credentials: ${{ secrets.PACKER_AZURE_CREDENTIALS }}
+      packer_client_id: ${{ secrets.PACKER_CLIENT_ID }}
+      packer_client_secret: ${{ secrets.PACKER_CLIENT_SECRET }}
+      packer_subscription_id: ${{ secrets.PACKER_SUBSCRIPTION_ID }}
+      packer_tenant_id: ${{ secrets.PACKER_TENANT_ID }}
+      packer_artifacts_resource_group: ${{ secrets.PACKER_ARTIFACTS_RESOURCE_GROUP }}
+      packer_build_resource_group: ${{ secrets.PACKER_BUILD_RESOURCE_GROUP }}
