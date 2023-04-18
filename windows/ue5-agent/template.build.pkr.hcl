@@ -26,7 +26,7 @@ source "azure-arm" "build" {
   managed_image_name                = local.image_name
 
   shared_image_gallery_destination {
-    shared_image_gallery_timeout = "3h0m0s"
+    shared_image_gallery_timeout = "5h0m0s"
     subscription                 = var.subscription_id
     resource_group               = var.gallery_resource_group
     gallery_name                 = var.gallery_name
