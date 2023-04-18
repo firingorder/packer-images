@@ -1,7 +1,7 @@
 locals {
   image_name         = "UnrealAgent-Build-Windows"
-  managed_image_name = "${lower(local.image_name)}-${local.image_version}"
   image_version      = formatdate("YYYY.MM.DDhhmmss", timestamp())
+  managed_image_name = "${lower(local.image_name)}-${local.image_version}"
 }
 
 source "azure-arm" "build" {
@@ -23,7 +23,7 @@ source "azure-arm" "build" {
   image_version   = var.source_image_version
 
   managed_image_resource_group_name = var.artifacts_resource_group
-  managed_image_name                = local.image_name
+  managed_image_name                = local.managed_image_name
   shared_image_gallery_timeout      = "5h0m0s"
 
   shared_image_gallery_destination {
