@@ -28,3 +28,5 @@ jobs:
       packer_tenant_id: ${{ secrets.PACKER_TENANT_ID }}
       packer_artifacts_resource_group: ${{ secrets.PACKER_ARTIFACTS_RESOURCE_GROUP }}
       packer_build_resource_group: ${{ secrets.PACKER_BUILD_RESOURCE_GROUP }}
+      packer_gallery_resource_group: ${{ secrets.PACKER_GALLERY_RESOURCE_GROUP }}
+      packer_gallery_name: ${{ secrets.PACKER_GALLERY_NAME }}
