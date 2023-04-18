@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         image:
-        #- windows/ue5-agent
+        - windows/ue5-agent
         #- ubuntu/k3s
         - ubuntu/perforce
     with:

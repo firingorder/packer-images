@@ -51,3 +51,18 @@ variable "source_image_version" {
   type        = string
   description = "Windows Image Version."
 }
+
+variable "gallery_resource_group" {
+  type        = string
+  description = "Azure Gallery Resource Group Name."
+}
+
+variable "gallery_name" {
+  type        = string
+  description = "Azure Gallery Name."
+}
+
+variable "git_commit" {
+  type        = string
+  description = "Git Commit hash associated with the build."
+}

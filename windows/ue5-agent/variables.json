@@ -1,0 +1,5 @@
+{
+    "source_image_publisher": "MicrosoftWindowsDesktop",
+    "source_image_offer": "windows-11",
+    "source_image_sku": "win11-21h2-avd"
+}
