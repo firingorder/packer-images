@@ -1,5 +1,5 @@
 locals {
-  image_name         = "UE5-Build-Windows"
+  image_name         = "UnrealAgent-Build-Windows"
   managed_image_name = "${lower(local.image_name)}-${local.image_version}"
   image_version      = formatdate("YYYY.MM.DDhhmmss", timestamp())
 }
