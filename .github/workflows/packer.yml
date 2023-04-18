@@ -131,7 +131,7 @@ jobs:
     name: Run Packer
     runs-on: ubuntu-latest
     needs: [check_source, latest_version, check_image_exists]
-    if: always() && (inputs.force_build == true || needs.check_image_exists.outputs.exists == false)
+    if: always() && (inputs.force_build == true || needs.check_image_exists.outputs.exists == 'false')
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
