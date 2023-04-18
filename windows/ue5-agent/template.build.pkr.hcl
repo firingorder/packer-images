@@ -24,15 +24,15 @@ source "azure-arm" "build" {
 
   managed_image_resource_group_name = var.artifacts_resource_group
   managed_image_name                = local.image_name
+  shared_image_gallery_timeout      = "5h0m0s"
 
   shared_image_gallery_destination {
-    shared_image_gallery_timeout = "5h0m0s"
-    subscription                 = var.subscription_id
-    resource_group               = var.gallery_resource_group
-    gallery_name                 = var.gallery_name
-    image_name                   = local.image_name
-    image_version                = local.image_version
-    storage_account_type         = "Standard_LRS"
+    subscription         = var.subscription_id
+    resource_group       = var.gallery_resource_group
+    gallery_name         = var.gallery_name
+    image_name           = local.image_name
+    image_version        = local.image_version
+    storage_account_type = "Standard_LRS"
     replication_regions = [
       "ukwest"
     ]
